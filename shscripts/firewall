@@ -1,0 +1,40 @@
+#!/bin/bash
+source /var/www/shscripts/variable.sh
+lan="10.0.0.0/22"
+fake_lan="10.0.4.0/22" 
+echo "1" > /proc/sys/net/ipv4/ip_forward
+
+
+# czyszczenie starych regul
+iptables -F
+iptables -X
+iptables -t nat -X
+iptables -t nat -F
+iptables -t mangle -F
+iptables -t mangle -X
+
+
+# ustawienie domyslnej polityki
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+#iptables -A INPUT -s 10.0.4.0/22 -j DROP
+
+# utrzymanie polaczen nawiazanych
+iptables -A INPUT -j ACCEPT -m state --state ESTABLISHED,RELATED
+iptables -A FORWARD -j ACCEPT -m state --state ESTABLISHED,RELATED
+iptables -A OUTPUT -j ACCEPT -m state --state ESTABLISHED,RELATED
+
+
+# udostepnianie polaczenia w sieci
+iptables -t nat -A POSTROUTING -s ${lan} -j MASQUERADE
+iptables -t nat -A POSTROUTING -s ${fake_lan} -j MASQUERADE
+
+# przekierowanie na formularz
+#iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to 10.0.0.1:80
+iptables -A PREROUTING -t nat -s 10.0.4.0/22 -p tcp -j REDIRECT --to-port 80
+#iptables -A PREROUTING -t nat -s 10.0.4.0/22 -p tcp --dport 80 -j REDIRECT --to-port 80
+echo "firewall: "`date` >> $LOG_LOG
+
+
+

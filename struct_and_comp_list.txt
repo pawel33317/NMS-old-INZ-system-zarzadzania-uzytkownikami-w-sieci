@@ -1,0 +1,77 @@
+/var/www
++		config.php
+-		database.php							
+-		index.php													//przekierowanie na user panel
+-		struct_and_comp_list.php									//ten plik
+
+		adminx
+-				dashboard.css  signin.css login.php  show_users.php  
+-				user_edit_add.php   user_options_change.php  search.php 
++				index.php  
++				stats.php
+
+		file_to_check_to_reload										//jesli content 1 to przeladowuje
+-				apache.s  cron.s  dhcpreload.s  dhcp.s  
+-				firewall.s  logi.s  mysql.s  newusr.s  stany.s
+
+		log_to_php_panel											//logi wyœwietlane w panelu na stronie
+																	//skrypty robiace logi
+-				last-5.sh    tail-5var-log-messages.sh    tail-5dmesg.sh                        
+-				tail-5var-log-cron.sh    tail-10var-lib-dhcpd-dhcpd.leases.sh    
+																	//zawartoœæ logów
+-				last-5.stan   tail-5dmesg.stan tail-5var-log-cron.stan  
+-				tail-10var-lib-dhcpd-dhcpd.leases.stan  tail-5var-log-messages.stan
+
+		php_create_config
+-				load_dhcp_conf.php    loadiptables.php  			//generuja konfigi dhcp firewall
+-				load_dhcp_conf.txt    loadiptables.txt				//wygenerowane konfigi
+
+		service_state
+-				crond.d  dhcpd.d  httpd.d  iptables.d  mysqld.d		//aktualne stany us³ug
+	
+		strona
+-				du¿o...												//grafika czcionku jquery ...
+	
+		user_panel
++				index.php  											//panel usera
++				install.php											//INSTALACJA PANELU
+
+		shscripts
+				dhcp_conf_reload.sh  								//prze³adowywuje dhcpd z nowym confem
+				firewall  											//firewall
+				log.log  											//Logi wszystkiego
+				reloadALL.sh  										//SKRYPT G£OWNY ODPALANY W CRONIE
+				variable.sh											//zmienne do skryptów sh
+				
+/etc/dhcp/dhcpd.conf
+/var/lib/dhcp/dhcpd.leases
+/usr/bin/php
+/etc/init.d/isc-dhcp-server
+/etc/init.d/apache2
+/etc/init.d/mysqld
+/etc/init.d/cron
+Linux debian 3.2.0-4-amd64 #1 SMP Debian 3.2.60-1+deb7u3 x86_64 GNU/Linux
+/etc/crontab
+		*       *       *       *       *       root    /var/www/shscripts/reloadALL.sh
+/etc/sudoers
+		www-data ALL=(ALL:ALL) ALL
+
+/etc/network/interfaces
+	auto lo
+	iface lo inet loopback
+	auto eth0
+	iface eth0 inet dhcp
+	auto eth1
+	iface eth1 inet static
+		   address 10.0.0.1
+		   netmask 255.255.248.0
+		   gateway 10.0.0.1
+
+
+
+
+
+
+
+
+

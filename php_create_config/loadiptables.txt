@@ -1,0 +1,7 @@
+#poprzednie iptables /var/www/shscripts/firewall 
+
+iptables -A FORWARD -p all -s 10.0.0.6 -j DROP
+iptables -I FORWARD -p udp -s 10.0.0.6 --dport 80 -j ACCEPT
+iptables -I FORWARD -p tcp -s 10.0.0.6 --dport 80 -j ACCEPT
+iptables -I FORWARD -p udp -s 10.0.0.6 --dport 53 -j ACCEPT
+iptables -I FORWARD -p tcp -s 10.0.0.6 --dport 53 -j ACCEPT

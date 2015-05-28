@@ -1,0 +1,43 @@
+#authoritative;
+	#ddns-update-style none;
+
+	subnet 10.0.0.0 netmask 255.255.248.0 {
+		#option broadcast-address 10.0.7.255;
+		range 10.0.4.2 10.0.7.254;
+		option domain-name-servers 8.8.8.8, 212.51.207.67;
+		#option domain-name "bambo";
+		option routers 10.0.0.1;
+			default-lease-time 300;
+			max-lease-time 1200;
+			#lease-file-name "/var/db/dhcpd.leases" ;
+			#option subnet-mask 255.255.252.0;
+	host a1 	{	#Karolina Kowalska (carolina) - 332
+		hardware ethernet 28:e3:47:14:0c:e0;
+		fixed-address 10.0.0.3;
+	}
+	host a2 	{	#Karolina Kowalska (carolina) - 332
+		hardware ethernet 38:0a:94:82:d7:8e;
+		fixed-address 10.0.0.4;
+	}
+	host a3 	{	#Karolina Kowalska (carolina) - 332
+		hardware ethernet 78:4b:87:cc:4b:8f;
+		fixed-address 10.0.0.5;
+	}
+	host a4 	{	#Michał Adamiak (michalll) - 453
+		hardware ethernet 00:C0:9F:C3:78:22;
+		fixed-address 10.0.0.2;
+	}
+	host a5 	{	#Paweł Czubak (pawel33317) - 103
+		hardware ethernet 08:00:27:c4:7e:49;
+		fixed-address 10.0.0.6;
+	}
+	host a6 	{	#Marcin Kopycki (marv) - 206
+		hardware ethernet 08:00:27:92:66:cf;
+		fixed-address 10.0.0.7;
+	}
+	host a7 	{	#Michał Adamiak (michalll) - 453
+		hardware ethernet ec:f4:bb:3f:78:05;
+		fixed-address 10.0.0.8;
+	}
+#range dynamic-bootp 10.0.4.1 10.0.7.255;
+}

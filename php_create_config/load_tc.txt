@@ -1,0 +1,91 @@
+
+#poprzednie iptables /var/www/shscripts/firewall
+#poprzednie iptables /var/www/shscripts/loadiptables.txt
+/var/www/shscripts/firewall
+	
+#USTAWIENIA KART SIECIOWYCH
+tc qdisc del dev eth1 root
+tc -s qdisc ls dev eth1
+tc qdisc del dev eth0 root
+tc -s qdisc ls dev eth0
+/sbin/tc qdisc add dev eth1 root handle 1: htb
+/sbin/tc class add dev eth1 parent 1: classid 1:1 htb rate 1000mbit
+/sbin/tc qdisc add dev eth0 root handle 1: htb
+/sbin/tc class add dev eth0 parent 1: classid 1:1 htb rate 1000mbit
+
+
+#DOWNLOAD Domyslne
+/sbin/tc class add dev eth1 parent 1:1 classid 1:0xb htb rate 10mbit prio 2
+/sbin/tc filter add dev eth1 parent 1:0 prio 1 protocol ip handle 0xb fw flowid 1:0xb
+#WWW Domyslne
+/sbin/tc class add dev eth1 parent 1:1 classid 1:0xa htb rate 15mbit prio 1
+/sbin/tc filter add dev eth1 parent 1:0 prio 1 protocol ip handle 0xa fw flowid 1:0xa
+#UPLOAD Domyslne
+/sbin/tc class add dev eth0 parent 1:1 classid 1:0xc htb rate 3mbit prio 1
+/sbin/tc filter add dev eth0 parent 1:0 prio 1 protocol ip handle 0xc fw flowid 1:0xc
+
+			#!!!!!!!!NOWY USER - carolina - 10.0.0.5
+#DOWNLOAD
+iptables -t mangle -I POSTROUTING -p all -d 10.0.0.5 -j MARK --set-mark 0xb
+#WWW
+iptables -t mangle -A POSTROUTING -p tcp -d 10.0.0.5 --sport 80 -j MARK --set-mark 0xa
+#WWW
+iptables -i eth1 -t mangle -I PREROUTING -p all -s 10.0.0.5 -j MARK --set-mark 0xc
+			#NOWY KOMP 10.0.0.4
+#DOWNLOAD
+iptables -t mangle -I POSTROUTING -p all -d 10.0.0.4 -j MARK --set-mark 0xb
+#WWW
+iptables -t mangle -A POSTROUTING -p tcp -d 10.0.0.4 --sport 80 -j MARK --set-mark 0xa
+#WWW
+iptables -i eth1 -t mangle -I PREROUTING -p all -s 10.0.0.4 -j MARK --set-mark 0xc
+			#NOWY KOMP 10.0.0.3
+#DOWNLOAD
+iptables -t mangle -I POSTROUTING -p all -d 10.0.0.3 -j MARK --set-mark 0xb
+#WWW
+iptables -t mangle -A POSTROUTING -p tcp -d 10.0.0.3 --sport 80 -j MARK --set-mark 0xa
+#WWW
+iptables -i eth1 -t mangle -I PREROUTING -p all -s 10.0.0.3 -j MARK --set-mark 0xc
+			#!!!!!!!!NOWY USER - pawel33317 - 10.0.0.6
+#DOWNLOAD
+/sbin/tc class add dev eth1 parent 1:1 classid 1:0x4e86 htb rate 1mbit prio 2
+/sbin/tc filter add dev eth1 parent 1:0 prio 1 protocol ip handle 0x4e86 fw flowid 1:0x4e86
+iptables -t mangle -I POSTROUTING -p all -d 10.0.0.6 -j MARK --set-mark 0x4e86
+#WWW
+/sbin/tc class add dev eth1 parent 1:1 classid 1:0x2776 htb rate 10mbit prio 1
+/sbin/tc filter add dev eth1 parent 1:0 prio 1 protocol ip handle 0x2776 fw flowid 1:0x2776
+iptables -t mangle -A POSTROUTING -p tcp -d 10.0.0.6 --sport 80 -j MARK --set-mark 0x2776
+#UPLOAD
+/sbin/tc class add dev eth0 parent 1:1 classid 1:0x7596 htb rate 2mbit prio 1
+/sbin/tc filter add dev eth0 parent 1:0 prio 1 protocol ip handle 0x7596 fw flowid 1:0x7596
+iptables -i eth1 -t mangle -I PREROUTING -p all -s 10.0.0.6 -j MARK --set-mark 0x7596
+			#!!!!!!!!NOWY USER - marv - 10.0.0.7
+#DOWNLOAD
+iptables -t mangle -I POSTROUTING -p all -d 10.0.0.7 -j MARK --set-mark 0xb
+#WWW
+iptables -t mangle -A POSTROUTING -p tcp -d 10.0.0.7 --sport 80 -j MARK --set-mark 0xa
+#WWW
+iptables -i eth1 -t mangle -I PREROUTING -p all -s 10.0.0.7 -j MARK --set-mark 0xc
+			#!!!!!!!!NOWY USER - michalll - 10.0.0.8
+#DOWNLOAD
+iptables -t mangle -I POSTROUTING -p all -d 10.0.0.8 -j MARK --set-mark 0xb
+#WWW
+iptables -t mangle -A POSTROUTING -p tcp -d 10.0.0.8 --sport 80 -j MARK --set-mark 0xa
+#WWW
+iptables -i eth1 -t mangle -I PREROUTING -p all -s 10.0.0.8 -j MARK --set-mark 0xc
+			#NOWY KOMP 10.0.0.2
+#DOWNLOAD
+iptables -t mangle -I POSTROUTING -p all -d 10.0.0.2 -j MARK --set-mark 0xb
+#WWW
+iptables -t mangle -A POSTROUTING -p tcp -d 10.0.0.2 --sport 80 -j MARK --set-mark 0xa
+#WWW
+iptables -i eth1 -t mangle -I PREROUTING -p all -s 10.0.0.2 -j MARK --set-mark 0xc
+			#!!!!!!!!NOWY USER - test - 10.0.0.9
+#DOWNLOAD
+iptables -t mangle -I POSTROUTING -p all -d 10.0.0.9 -j MARK --set-mark 0xb
+#WWW
+iptables -t mangle -A POSTROUTING -p tcp -d 10.0.0.9 --sport 80 -j MARK --set-mark 0xa
+#WWW
+iptables -i eth1 -t mangle -I PREROUTING -p all -s 10.0.0.9 -j MARK --set-mark 0xc
+iptables -t mangle -I POSTROUTING -p all -d 10.0.0.0/22 -j MARK --set-mark 0xb
+iptables -t mangle -I POSTROUTING -p tcp -d 10.0.0.0/22 --dport 80 -j MARK --set-mark 0xa
+iptables -i eth1 -t mangle -I PREROUTING -p all -s 10.0.0.0/22 -j MARK --set-mark 0xc
